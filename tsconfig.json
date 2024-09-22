@@ -6,7 +6,7 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "outDir": "./src/js"
+    "outDir": "./js"
   },
-  "include": ["src"]
+  "include": ["ts"]
 }
