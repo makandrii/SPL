@@ -452,7 +452,7 @@ button {
     font-family: 'Baloo Chettan 2', cursive;
 }
 
-.menu_section_2 {
+#menu_section_2 {
     width: 100%;
     float: left;
     padding-top: 50px;
@@ -534,7 +534,7 @@ span.mixer_text {
     float: left;
 }
 
-.read_bt a {
+.read_bt button {
     width: 100%;
     float: left;
     padding: 8px 10px;
@@ -544,7 +544,7 @@ span.mixer_text {
     font-size: 18px;
 }
 
-.read_bt a:hover {
+.read_bt button:hover {
     color: #fefefd;
     background-color: #980200;
 }
@@ -905,3 +905,38 @@ textarea.comment.massage-bt::placeholder {
 .margin_top90 {
     margin-top: 90px;
 }
+
+/* modal widget section start*/
+
+.hidden {
+    display: none !important;
+}
+
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+}
+
+.modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+    height: 150px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.modal-content button {
+    padding: 10px 20px 10px 20px;
+    background-color: #980200;
+    color: white;
+}
+
+/* modal widget section end */
