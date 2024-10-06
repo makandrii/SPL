@@ -29,3 +29,20 @@ type Lesson = {
     dayOfWeek: DayOfWeek;
     timeSlot: TimeSlot;
 }
+
+const professors: Professor[] = [];
+const classrooms: Classroom[] = [];
+const courses: Course[] = [];
+const schedule: Lesson[] = [];
+
+const addProfessor = (professor: Professor): void => {
+    professors.push(professor);
+}
+
+const addLesson = (lesson: Lesson): boolean => {
+    if (schedule.includes(lesson)) {
+        return false;
+    }
+    schedule.push(lesson);
+    return true;
+}
