@@ -30,6 +30,11 @@ type Lesson = {
     timeSlot: TimeSlot;
 }
 
+type ScheduleConflict = {
+    type: "ProfessorConflict" | "ClassroomConflict";
+    lessonDetails: Lesson
+}
+
 const professors: Professor[] = [];
 const classrooms: Classroom[] = [];
 const courses: Course[] = [];
@@ -40,7 +45,7 @@ const addProfessor = (professor: Professor): void => {
 }
 
 const addLesson = (lesson: Lesson): boolean => {
-    if (schedule.includes(lesson)) {
+    if (validateLesson(lesson)) {
         return false;
     }
     schedule.push(lesson);
@@ -59,4 +64,21 @@ const findAvailableClassroom = (timeSlot: TimeSlot, dayOfWeek: DayOfWeek): strin
 
 const getProfessorSchedule = (professorId: number): Lesson[] => {
     return schedule.filter((lesson: Lesson) => lesson.professorId === professorId);
+}
+
+const validateLesson = (lesson: Lesson): ScheduleConflict | null => {
+    const firstConflict = schedule.find((scheduleLesson: Lesson) =>
+        scheduleLesson.timeSlot === lesson.timeSlot &&
+        (scheduleLesson.professorId === lesson.professorId ||
+        scheduleLesson.classroomNumber === lesson.classroomNumber)
+    );
+
+    if (firstConflict) {
+        const type: "ProfessorConflict" | "ClassroomConflict" =
+            firstConflict.professorId === lesson.professorId ? "ProfessorConflict" : "ClassroomConflict";
+
+        return { type, lessonDetails: lesson };
+    }
+
+    return null;
 }
