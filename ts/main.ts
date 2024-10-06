@@ -70,15 +70,34 @@ const validateLesson = (lesson: Lesson): ScheduleConflict | null => {
     const firstConflict = schedule.find((scheduleLesson: Lesson) =>
         scheduleLesson.timeSlot === lesson.timeSlot &&
         (scheduleLesson.professorId === lesson.professorId ||
-        scheduleLesson.classroomNumber === lesson.classroomNumber)
+            scheduleLesson.classroomNumber === lesson.classroomNumber)
     );
 
     if (firstConflict) {
         const type: "ProfessorConflict" | "ClassroomConflict" =
             firstConflict.professorId === lesson.professorId ? "ProfessorConflict" : "ClassroomConflict";
 
-        return { type, lessonDetails: lesson };
+        return {type, lessonDetails: lesson};
     }
 
     return null;
+}
+
+const getClassroomUtilization = (classroomNumber: string): number => {
+    const totalLessons: number = schedule.filter((lesson: Lesson) => lesson.classroomNumber === classroomNumber).length;
+    const totalTimeSlots: number = 5;
+    const totalDaysOfWeek: number = 5;
+
+    return totalLessons / totalTimeSlots * totalDaysOfWeek * 100;
+}
+
+const getMostPopularCourseType = (): CourseType => {
+    const courseTypeCount: { [key in CourseType]?: number } = {};
+
+    courses.forEach(course => {
+        courseTypeCount[course.type] = (courseTypeCount[course.type] || 0) + 1;
+    });
+
+    return Object.keys(courseTypeCount)
+        .reduce((a, b) => courseTypeCount[a as CourseType]! > courseTypeCount[b as CourseType]! ? a : b) as CourseType;
 }
