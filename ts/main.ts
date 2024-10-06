@@ -46,3 +46,17 @@ const addLesson = (lesson: Lesson): boolean => {
     schedule.push(lesson);
     return true;
 }
+
+const findAvailableClassroom = (timeSlot: TimeSlot, dayOfWeek: DayOfWeek): string[] => {
+    const occupiedClassrooms = schedule
+        .filter((lesson: Lesson) => lesson.timeSlot === timeSlot && lesson.dayOfWeek === dayOfWeek)
+        .map((lesson: Lesson) => lesson.classroomNumber);
+
+    return classrooms
+        .map((classroom: Classroom) => classroom.number)
+        .filter((classroomNumber: string) => !occupiedClassrooms.includes(classroomNumber))
+}
+
+const getProfessorSchedule = (professorId: number): Lesson[] => {
+    return schedule.filter((lesson: Lesson) => lesson.professorId === professorId);
+}
