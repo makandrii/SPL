@@ -23,6 +23,7 @@ type Course = {
 }
 
 type Lesson = {
+    lessonId: number;
     courseId: number;
     professorId: number;
     classroomNumber: string;
@@ -38,7 +39,7 @@ type ScheduleConflict = {
 const professors: Professor[] = [];
 const classrooms: Classroom[] = [];
 const courses: Course[] = [];
-const schedule: Lesson[] = [];
+let schedule: Lesson[] = [];
 
 const addProfessor = (professor: Professor): void => {
     professors.push(professor);
@@ -53,7 +54,7 @@ const addLesson = (lesson: Lesson): boolean => {
 }
 
 const findAvailableClassroom = (timeSlot: TimeSlot, dayOfWeek: DayOfWeek): string[] => {
-    const occupiedClassrooms = schedule
+    const occupiedClassrooms: string[] = schedule
         .filter((lesson: Lesson) => lesson.timeSlot === timeSlot && lesson.dayOfWeek === dayOfWeek)
         .map((lesson: Lesson) => lesson.classroomNumber);
 
@@ -67,7 +68,7 @@ const getProfessorSchedule = (professorId: number): Lesson[] => {
 }
 
 const validateLesson = (lesson: Lesson): ScheduleConflict | null => {
-    const firstConflict = schedule.find((scheduleLesson: Lesson) =>
+    const firstConflict: Lesson | undefined = schedule.find((scheduleLesson: Lesson) =>
         scheduleLesson.timeSlot === lesson.timeSlot &&
         (scheduleLesson.professorId === lesson.professorId ||
             scheduleLesson.classroomNumber === lesson.classroomNumber)
@@ -100,4 +101,17 @@ const getMostPopularCourseType = (): CourseType => {
 
     return Object.keys(courseTypeCount)
         .reduce((a, b) => courseTypeCount[a as CourseType]! > courseTypeCount[b as CourseType]! ? a : b) as CourseType;
+}
+
+const reassingClassroom = (lessonId: number, newClassroomNumber: string): boolean => {
+    const lesson: Lesson | undefined = schedule.find((lesson: Lesson) => lesson.lessonId === lessonId);
+    if (lesson && !validateLesson({...lesson, classroomNumber: newClassroomNumber})) {
+        lesson.classroomNumber = newClassroomNumber;
+        return true;
+    }
+    return false;
+};
+
+const cancelLesson = (lessonId: number): void => {
+    schedule = schedule.filter((lesson: Lesson) => lesson.lessonId !== lessonId);
 }
